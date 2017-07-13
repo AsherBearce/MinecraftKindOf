@@ -22,23 +22,10 @@ namespace PlaneGame2.Instances
         public byte BlockGen(int x, int y, int z)//This method needs to be moved to it's own class
         {
             float noise = 10 * Noise.GetOctaveNoise(((double)x - Position.X) / 20f, ((double)y - Position.Y) / 20f, ((double)z - Position.Z) / 20f, 1) - 32 + y;//Temporary generator
-            byte ID;
 
-            if (noise < 6 && noise > 3.5)
-            {
-                ID = 2;
-            }
-            else if (noise < 3.5)
-            {
-                ID = 1;
-            }
-            else
-            {
-                ID = 0;
-            }
-
-            return ID;
+            return (byte)((noise < 6 && noise > 3.5) ? 2 : (noise < 3.5) ? 1 : 0);
         }
+
         /// <summary> The data for this chunk </summary>
         /// <param name="x"> The x coord of the voxel data </param>
         /// <param name="y"> The x coord of the voxel data </param>
@@ -49,6 +36,7 @@ namespace PlaneGame2.Instances
             get => isInRange(x, y, z) ? voxelData[x, y, z] : Container.GetChunkID(ToGlobalCoordinates(new Vector3(-x, -y, -z)));//Ask the current chunk manager for the data, if it's out of range.
             set { if (isInRange(x, y, z)) voxelData[x, y, z] = value; }
         }
+
         ///<summary> Sets the chunk data produced from the terrain generator</summary>
         public void PopulateChunk()
         {

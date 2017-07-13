@@ -49,3 +49,31 @@ C:\Users\Asher\Desktop\Suff to move\TechyStuff\CodeStuff\GithubShit\PlaneGame2\P
 C:\Users\Asher\Desktop\Suff to move\TechyStuff\CodeStuff\GithubShit\PlaneGame2\PlaneGame2\bin\Windows\x86\Debug\Content\VoxelShader.xnb
 C:\Users\Asher\Desktop\Suff to move\TechyStuff\CodeStuff\GithubShit\PlaneGame2\PlaneGame2\bin\Windows\x86\Debug\Content\Stone.xnb
 C:\Users\Asher\Desktop\Suff to move\TechyStuff\CodeStuff\GithubShit\PlaneGame2\PlaneGame2\bin\Windows\x86\Debug\Content\TexAtlas.xnb
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\Content\BasicShader.xnb
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\Content\Stone.xnb
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\Content\TexAtlas.xnb
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\Content\VoxelShader.xnb
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\PlaneGame2.exe
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\PlaneGame2.pdb
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\MonoGame.Framework.dll
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.dll
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.DXGI.dll
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.Direct3D11.dll
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.Direct2D1.dll
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.XInput.dll
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.Direct3D9.dll
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\MonoGame.Framework.xml
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.MediaFoundation.xml
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.xml
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.XAudio2.xml
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.DXGI.xml
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.XInput.xml
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\obj\x86\Debug\PlaneGame2.csprojResolveAssemblyReference.cache
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\obj\x86\Debug\PlaneGame2.exe
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\obj\x86\Debug\PlaneGame2.pdb
+C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\Content\FPS.xnb

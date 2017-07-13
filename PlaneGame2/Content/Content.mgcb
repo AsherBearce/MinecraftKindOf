@@ -49,3 +49,10 @@
 /processorParam:TextureFormat=Color
 /build:TexAtlas.png
 
+#begin FPS.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:FPS.spritefont
+

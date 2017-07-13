@@ -34,7 +34,7 @@ namespace PlaneGame2.Instances
 
                 //Sets the rotation
                 rotation = value;
-                UpdateTransform();
+                updateTransform();
                 //Sets the rotation of localTransform
                 //localTransform = Matrix.CreateTranslation(Position) * rotation;
             }
@@ -49,7 +49,7 @@ namespace PlaneGame2.Instances
             {
                 position = value;
                 //localTransform.Translation = value;
-                UpdateTransform();
+                updateTransform();
             }
         }
 
@@ -61,7 +61,7 @@ namespace PlaneGame2.Instances
             set
             {
                 scale = value;
-                UpdateTransform();
+                updateTransform();
             }
         }
 
@@ -75,10 +75,13 @@ namespace PlaneGame2.Instances
         public Vector3 UpVector { get { return new Vector3(LocalTransform.M12, LocalTransform.M22, LocalTransform.M32); } }
         #endregion
 
-        void UpdateTransform()
+        #region PRIVATE PROPERTIES
+        /// <summary> Updates the transform </summary>
+        private void updateTransform()
         {
             localTransform = Matrix.CreateTranslation(position) * rotation * Matrix.CreateScale(scale);
         }
+        #endregion
 
         #region PUBLIC CONSTRUCTORS
         /// <summary> Creates a blank GameObject </summary>

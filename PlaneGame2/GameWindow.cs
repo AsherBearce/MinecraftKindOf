@@ -28,6 +28,8 @@ namespace PlaneGame2
         Texture2D texture;
         Texture2D atlas;
 
+        SpriteFont FPSFont;
+
         float camPitch = 0;
         float camYaw = 0;
 
@@ -41,8 +43,6 @@ namespace PlaneGame2
 
         protected override void Initialize()
         {
-            //Initalize blocks
-            GameRegistery.init();
             //Create a new scene
             mainScene = new Scene();
 
@@ -72,6 +72,8 @@ namespace PlaneGame2
             atlas = Content.Load<Texture2D>("TexAtlas");
 
             coob.MeshData.Shader = shader;
+
+            FPSFont = Content.Load<SpriteFont>("FPS");
 
             for (int x = 0; x < 10; x++)//Around 100 chunks being loaded, here. Not too bad.
             {
@@ -195,6 +197,8 @@ namespace PlaneGame2
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.LinearClamp, DepthStencilState.DepthRead, RasterizerState.CullCounterClockwise);
 
             spriteBatch.Draw(mainCamera.Screen, new Rectangle(0, 0, 1024, 720), Color.White);
+
+            spriteBatch.DrawString(FPSFont, ((int)(1 / gameTime.ElapsedGameTime.TotalSeconds)).ToString(), new Vector2(10, 10), Color.White);
 
             spriteBatch.End();
 

@@ -31,8 +31,10 @@ namespace PlaneGame2.Instances
         //Hopefully set does nothing?
         /// <summary> The MeshData for this VoxelObject </summary>
         public Mesh MeshData { get => meshData; set { Console.WriteLine("Tried to modify voxel's MeshData"); } }
+
         ///<summary> The texture atlas that the voxel object current uses </summary>
         public Texture2D Atlas;
+
         /// <summary> The data for this VoxelObject </summary>
         /// <param name="x"> The x coord of the voxel data </param>
         /// <param name="y"> The y coord of the voxel data </param>
@@ -61,13 +63,13 @@ namespace PlaneGame2.Instances
         /// <param name="z"> The z coord </param>
         /// <returns> If the given coords are in range </returns>
         internal bool isInRange(int x, int y, int z) => x >= 0 && x < Width && y >= 0 && y < Height && z >= 0 && z < Depth;
-        #endregion
-
-        private static int Mod(float x, float y)
+        
+        private static int mod(float x, float y)
         {
             float sgnX = System.Math.Sign(x);
             return (int)sgnX * (int)System.Math.Floor((sgnX * x) / y);
         }
+        #endregion
 
         #region PUBLIC FUNCTIONS
         public Vector3 VoxelCoordinates(Vector3 Position)//I think this works now
@@ -76,7 +78,7 @@ namespace PlaneGame2.Instances
             int sgnX = System.Math.Sign(ObjSpace.X);
             int sgnY = System.Math.Sign(ObjSpace.Y);
             int sgnZ = System.Math.Sign(ObjSpace.Z);
-            Vector3 returnVector = new Vector3(-Mod(ObjSpace.X + 0.5f * sgnX, 1), -Mod(ObjSpace.Y + 0.5f * sgnY, 1), -Mod(ObjSpace.Z + 0.5f * sgnZ, 1));
+            Vector3 returnVector = new Vector3(-mod(ObjSpace.X + 0.5f * sgnX, 1), -mod(ObjSpace.Y + 0.5f * sgnY, 1), -mod(ObjSpace.Z + 0.5f * sgnZ, 1));
             return returnVector;
         }// I think I need to do an inverse function of this.
 
@@ -128,6 +130,11 @@ namespace PlaneGame2.Instances
             LinkedList<Vector3> Norms = new LinkedList<Vector3>();
             LinkedList<Vector2> Uv = new LinkedList<Vector2>();
 
+            int texSizeX = Atlas.Width;
+            int texSizeY = Atlas.Height;
+            float px = 16 / (float)texSizeX;
+            float py = 16 / (float)texSizeY;
+
             for (int x = 0; x < Width; x++)
             {
                 for (int z = 0; z < Depth; z++)
@@ -138,31 +145,20 @@ namespace PlaneGame2.Instances
 
                         if (blockID != 0)
                         {
-                            IBlock blockType = (IBlock)GameRegistery.GetBlock(blockID);
+                            Block block = BlockManager.GetBlockFromID(blockID);
 
-                            int texSizeX = Atlas.Width;
-                            int texSizeY = Atlas.Height;
-                            float px = 16 / (float)texSizeX;
-                            float py = 16 / (float)texSizeY;
-                            Vector2 offset = new Vector2(blockType.TextureAddress.X * px, blockType.TextureAddress.Y * py);
+                            Vector2 offset = new Vector2(block.TextureOffsetX * px, block.TextureOffsetY * py);
 
-                            byte upID = this[x, y + 1, z];
-                            byte downID = this[x, y - 1, z];
-                            byte rightID = this[x + 1, y, z];
-                            byte leftID = this[x - 1, y, z];
-                            byte frontID = this[x, y, z - 1];
-                            byte backID = this[x, y, z + 1];
-
-                            IBlock UpType = (IBlock)GameRegistery.GetBlock(upID);
-                            IBlock DownType = (IBlock)GameRegistery.GetBlock(downID);
-                            IBlock RightType = (IBlock)GameRegistery.GetBlock(rightID);
-                            IBlock LeftType = (IBlock)GameRegistery.GetBlock(leftID);
-                            IBlock FrontType = (IBlock)GameRegistery.GetBlock(frontID);
-                            IBlock BackType = (IBlock)GameRegistery.GetBlock(backID);
+                            Block upType = BlockManager.GetBlockFromID(this     [x, y + 1, z]);
+                            Block downType = BlockManager.GetBlockFromID(this   [x, y - 1, z]);
+                            Block rightType = BlockManager.GetBlockFromID(this  [x + 1, y, z]);
+                            Block leftType = BlockManager.GetBlockFromID(this   [x - 1, y, z]);
+                            Block frontType = BlockManager.GetBlockFromID(this  [x, y, z - 1]);
+                            Block backType = BlockManager.GetBlockFromID(this   [x, y, z + 1]);
 
                             Vector3 voxelPosition = new Vector3(x, y, z);
 
-                            if (UpType.type != blockType.type)
+                            if (upType.Type != block.Type)
                             {
                                 Verticies.AddLast(voxelPosition + new Vector3(0.5f, 0.5f, 0.5f));
                                 Verticies.AddLast(voxelPosition + new Vector3(-0.5f, 0.5f, 0.5f));
@@ -186,7 +182,7 @@ namespace PlaneGame2.Instances
                                 Norms.AddLast(new Vector3(0, 1, 0));
                             }
 
-                            if (DownType.type != blockType.type)
+                            if (downType.Type != block.Type)
                             {
                                 Verticies.AddLast(voxelPosition + new Vector3(0.5f, -0.5f, 0.5f));
                                 Verticies.AddLast(voxelPosition + new Vector3(-0.5f, -0.5f, 0.5f));
@@ -210,7 +206,7 @@ namespace PlaneGame2.Instances
                                 Norms.AddLast(new Vector3(0, -1, 0));
                             }
 
-                            if (FrontType.type != blockType.type)
+                            if (frontType.Type != block.Type)
                             {
                                 Verticies.AddLast(voxelPosition + new Vector3(0.5f, 0.5f, -0.5f));
                                 Verticies.AddLast(voxelPosition + new Vector3(-0.5f, 0.5f, -0.5f));
@@ -234,7 +230,7 @@ namespace PlaneGame2.Instances
                                 Norms.AddLast(new Vector3(0, 0, -1));
                             }
 
-                            if (BackType.type != blockType.type)
+                            if (backType.Type != block.Type)
                             {
                                 Verticies.AddLast(voxelPosition + new Vector3(0.5f, 0.5f, 0.5f));
                                 Verticies.AddLast(voxelPosition + new Vector3(-0.5f, 0.5f, 0.5f));
@@ -258,7 +254,7 @@ namespace PlaneGame2.Instances
                                 Norms.AddLast(new Vector3(0, 0, -1));
                             }
 
-                            if (RightType.type != blockType.type)
+                            if (rightType.Type != block.Type)
                             {
                                 Verticies.AddLast(voxelPosition + new Vector3(0.5f, 0.5f, 0.5f));
                                 Verticies.AddLast(voxelPosition + new Vector3(0.5f, -0.5f, 0.5f));
@@ -282,7 +278,7 @@ namespace PlaneGame2.Instances
                                 Norms.AddLast(new Vector3(1, 0, 0));
                             }
 
-                            if (LeftType.type != blockType.type)
+                            if (leftType.Type != block.Type)
                             {
                                 Verticies.AddLast(voxelPosition + new Vector3(-0.5f, 0.5f, 0.5f));
                                 Verticies.AddLast(voxelPosition + new Vector3(-0.5f, -0.5f, 0.5f));

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/PlaneGame2/PlaneGame2/Content/Stone.png</SourceFile>
-  <SourceTime>2017-07-05T15:34:33.3325558-06:00</SourceTime>
-  <DestFile>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/PlaneGame2/PlaneGame2/Content/bin/Windows/Stone.xnb</DestFile>
-  <DestTime>2017-07-05T15:43:24.636228-06:00</DestTime>
+  <SourceFile>C:/Users/Liru-Pc/Source/Repos/PlaneGame/PlaneGame2/Content/Stone.png</SourceFile>
+  <SourceTime>2017-07-13T19:01:18.3410441+01:00</SourceTime>
+  <DestFile>C:/Users/Liru-Pc/Source/Repos/PlaneGame/PlaneGame2/Content/bin/Windows/Stone.xnb</DestFile>
+  <DestTime>2017-07-13T19:06:28.4186132+01:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2017-03-01T08:05:36-07:00</ImporterTime>
+  <ImporterTime>2017-03-01T15:05:36+00:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2017-03-01T08:05:36-07:00</ProcessorTime>
+  <ProcessorTime>2017-03-01T15:05:36+00:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>

@@ -41,10 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Blocks\Air.cs" />
-    <Compile Include="Blocks\Dirt.cs" />
-    <Compile Include="Blocks\Glass.cs" />
-    <Compile Include="Blocks\Stone.cs" />
+    <Compile Include="Blocks\Block.cs" />
     <Compile Include="GameWindow.cs" />
     <Compile Include="Instances\Camera.cs" />
     <Compile Include="Instances\Chunk.cs" />
@@ -58,7 +55,6 @@
     <Compile Include="MeshTypes\Mesh.cs" />
     <Compile Include="Instances\MeshObject.cs" />
     <Compile Include="Instances\Scene.cs" />
-    <Compile Include="Misc\GameRegistery.cs" />
     <Compile Include="Misc\Noise.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,12 +68,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
-    <Content Include="Textures\Stone.png" />
-    <Content Include="Textures\TexAtlas.png" />
+    <Content Include="Content\Textures\Stone.png" />
+    <Content Include="Content\Textures\TexAtlas.png" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+    <None Include="Content\FPS.spritefont" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Terrain\" />
