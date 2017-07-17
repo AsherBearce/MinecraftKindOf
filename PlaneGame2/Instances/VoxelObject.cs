@@ -120,6 +120,11 @@ namespace PlaneGame2.Instances
             base.Draw(graphicsDevice, activeCamera);
         }
 
+        public void Deallocate()
+        {
+            voxelData = null;
+        }
+
         /// <summary> Creates a mesh based on the voxel data </summary>
         public virtual void RecalculateMesh(GraphicsDevice device, Effect Shader)
         {

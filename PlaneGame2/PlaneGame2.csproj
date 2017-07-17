@@ -56,6 +56,7 @@
     <Compile Include="Instances\MeshObject.cs" />
     <Compile Include="Instances\Scene.cs" />
     <Compile Include="Misc\Noise.cs" />
+    <Compile Include="Misc\TerrainGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

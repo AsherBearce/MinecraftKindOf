@@ -7,10 +7,6 @@ using System.Collections.Generic;
 using PlaneGame2.Misc;
 using PlaneGame2.Blocks;
 
-/*
- * Most issues are fixed: The only problem now is updating other chunks that don't necessarily have their voxel data changed, but should be updated because voxel data near them was changed.
- * This should be an easy fix. Whenever changing a block (must be done from the ChunkManager) simply check around the block to make sure it's neighbors aren't in any other chunks. 
- */
 namespace PlaneGame2.Instances
 {
     public class Chunk : VoxelObject
@@ -19,9 +15,11 @@ namespace PlaneGame2.Instances
         public ChunkManager Container;
         /// <summary> Tells the engine to recalculate the mesh, if necessary </summary>
         public bool UpdateFlag = false;
+        public bool DeloadScheduled = false;
         public byte BlockGen(int x, int y, int z)//This method needs to be moved to it's own class
         {
-            float noise = 10 * Noise.GetOctaveNoise(((double)x - Position.X) / 20f, ((double)y - Position.Y) / 20f, ((double)z - Position.Z) / 20f, 1) - 32 + y;//Temporary generator
+            float yOff = 16 * Noise.GetOctaveNoise(((double)x - Position.X) / 50f, 0, ((double)z - Position.Z) / 50f, 1);
+            float noise = 10 * Noise.GetOctaveNoise(((double)x - Position.X) / 20f, ((double)y - Position.Y) / 20f, ((double)z - Position.Z) / 20f, 1) - yOff - 32 + y;//Temporary generator
 
             return (byte)((noise < 6 && noise > 3.5) ? 2 : (noise < 3.5) ? 1 : 0);
         }
@@ -46,7 +44,7 @@ namespace PlaneGame2.Instances
                 {
                     for (int y = 0; y < Height; y++)
                     {
-                        this[x, y, z] = BlockGen(x, y, z);
+                        this[x, y, z] = TerrainGenerator.BlockGen(x - Position.X, y - Position.Y, z - Position.Z);
                     }
                 }
             }

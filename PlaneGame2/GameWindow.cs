@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PlaneGame2.Instances;
 using PlaneGame2.Misc;
 
-//TODO: The block system needs some revision.
-//      Some revision is needed to allow multiple vertex declarations.
+//TODO: Fix the chunk cloning glitch.
 
 namespace PlaneGame2
 {
@@ -20,13 +20,16 @@ namespace PlaneGame2
         Scene mainScene;
         Camera mainCamera;
         Cube coob;
-        //Chunk chunkTest;
         ChunkManager Terrain;
         Effect shader;
         Effect voxelShader;
         MouseState OriginalMouseState;
         Texture2D texture;
         Texture2D atlas;
+        Chunk CurrentChunk;
+        Vector2 ChunkCoords;
+        Vector2 lastChunkCoords;
+        LinkedList<Vector2> LoadedChunks;
 
         SpriteFont FPSFont;
 
@@ -36,8 +39,8 @@ namespace PlaneGame2
         public GameWindow()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 1000;
+            graphics.PreferredBackBufferWidth = 1900;
             Content.RootDirectory = "Content";
         }
 
@@ -50,14 +53,17 @@ namespace PlaneGame2
             mainCamera = new Camera(GraphicsDevice, MathHelper.ToRadians(70f), 0.1f, 1000, (float)graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight);
             mainCamera.Parent = mainScene;
             coob = new Cube("Cube", mainScene, GraphicsDevice);
-            Terrain = new ChunkManager(20, 20);
+            Terrain = new ChunkManager(256, 256);
             Terrain.Parent = mainScene;
 
-            mainCamera.Position = new Vector3(0, 0, 0);
-            coob.Position = new Vector3(16 + 0.5f, -2, 0.5f);
+            mainCamera.Position = new Vector3(800, -50, 800);
+            coob.Position = new Vector3(800, -50, 800);
 
             Mouse.SetPosition(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             OriginalMouseState = Mouse.GetState();
+            CurrentChunk = Terrain.GetChunkFromPos(mainCamera.Position);
+            ChunkCoords = Terrain.GetChunkCoords(mainCamera.Position);
+            LoadedChunks = new LinkedList<Vector2>();
 
             base.Initialize();
         }
@@ -72,18 +78,11 @@ namespace PlaneGame2
             atlas = Content.Load<Texture2D>("TexAtlas");
 
             coob.MeshData.Shader = shader;
+            Terrain.Shader = voxelShader;
+            Terrain.Atlas = atlas;
 
             FPSFont = Content.Load<SpriteFont>("FPS");
 
-            for (int x = 0; x < 10; x++)//Around 100 chunks being loaded, here. Not too bad.
-            {
-                for (int y = 0; y < 10; y++)
-                {
-                    Terrain.LoadChunk(x, y, atlas);
-                }
-            }
-
-            Terrain.BuildWorld(GraphicsDevice, voxelShader);
             // TODO: use this.Content to load your game content here
         }
 
@@ -150,36 +149,82 @@ namespace PlaneGame2
 
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
-                    mainCamera.Position -= 0.1f * mainCamera.UpVector;
+                    mainCamera.Position -= 0.5f * mainCamera.UpVector;
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.E))
                 {
-                    mainCamera.Position += 0.1f * mainCamera.UpVector;
+                    mainCamera.Position += 0.5f * mainCamera.UpVector;
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.A))
                 {
-                    mainCamera.Position += 0.1f * mainCamera.RightVector;
+                    mainCamera.Position += 0.5f * mainCamera.RightVector;
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.D))
                 {
-                    mainCamera.Position -= 0.1f * mainCamera.RightVector;
+                    mainCamera.Position -= 0.5f * mainCamera.RightVector;
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.W))
                 {
-                    mainCamera.Position += 0.1f * mainCamera.ForwardVector;
+                    mainCamera.Position += 0.5f * mainCamera.ForwardVector;
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.S))
                 {
-                    mainCamera.Position -= 0.1f * mainCamera.ForwardVector;
+                    mainCamera.Position -= 0.5f * mainCamera.ForwardVector;
                 }
 
 
             }
+
+            ChunkCoords = Terrain.GetChunkCoords(mainCamera.Position);//It may be possible to use a linked list of loaded chunks, then traverse the list and unload chunks that are not needed
+
+            if (ChunkCoords != lastChunkCoords)
+            {
+                for (int x = -5; x <= 5; x++)
+                {
+                    for (int y = -5; y <= 5; y++)
+                    {
+                        CurrentChunk = Terrain[(int)ChunkCoords.X + x, (int)ChunkCoords.Y + y];
+                        if (CurrentChunk == null && Terrain.PositionInRange((int)ChunkCoords.X + x, (int)ChunkCoords.Y + y))
+                        {
+                            Terrain.QueryChunkLoad((int)ChunkCoords.X + x, (int)ChunkCoords.Y + y);//I bet this is getting called multiple times. 
+                        }
+                    }
+                }
+
+                LinkedListNode<Instance> Child = Terrain.Children.First;
+
+                if (Child != null)
+                {
+                    while (Child.Next != null)
+                    {
+                        if (Child.Value is Chunk)
+                        {
+                            Chunk ValAsChunk = (Chunk)Child.Value;
+                            Vector3 ChunkPos = ValAsChunk.Position;
+                            Vector2 Coords = new Vector2((ChunkPos.X - 15.5f) / 16f, (ChunkPos.Z - 15.5f) / 16f);
+                            if (Coords.X - ChunkCoords.X < -5 || Coords.X - ChunkCoords.X > 5 || Coords.Y - ChunkCoords.Y < -5 || Coords.Y - ChunkCoords.Y > 5)
+                            {
+                                if (!ValAsChunk.DeloadScheduled)
+                                {
+                                    Terrain.QueryChunkDeload((int)Coords.X, (int)Coords.Y);
+                                }
+                            }
+                        }
+                        if (Child.Next == null)
+                        {
+                            break;
+                        }
+                        Child = Child.Next;
+                    }
+                }
+            }
+            lastChunkCoords = ChunkCoords;
+            
 
             //Updates the scene
             mainScene.Update(gameTime);
@@ -196,10 +241,11 @@ namespace PlaneGame2
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.LinearClamp, DepthStencilState.DepthRead, RasterizerState.CullCounterClockwise);
 
-            spriteBatch.Draw(mainCamera.Screen, new Rectangle(0, 0, 1024, 720), Color.White);
+            spriteBatch.Draw(mainCamera.Screen, new Rectangle(0, 0, 1900 , 1000), Color.White);
 
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
             spriteBatch.DrawString(FPSFont, ((int)(1 / gameTime.ElapsedGameTime.TotalSeconds)).ToString(), new Vector2(10, 10), Color.White);
-
+            GraphicsDevice.BlendState = BlendState.Opaque;
             spriteBatch.End();
 
             base.Draw(gameTime);

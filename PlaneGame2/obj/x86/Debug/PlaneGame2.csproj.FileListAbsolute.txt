@@ -77,3 +77,4 @@ C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\obj\x86\Debug\PlaneGame2.cspr
 C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\obj\x86\Debug\PlaneGame2.exe
 C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\obj\x86\Debug\PlaneGame2.pdb
 C:\Users\Liru-Pc\Source\Repos\PlaneGame\PlaneGame2\bin\Windows\x86\Debug\Content\FPS.xnb
+C:\Users\Asher\Desktop\Suff to move\TechyStuff\CodeStuff\GithubShit\PlaneGame2\PlaneGame2\bin\Windows\x86\Debug\Content\FPS.xnb
