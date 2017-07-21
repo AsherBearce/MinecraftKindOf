@@ -6,6 +6,10 @@ using PlaneGame2.Instances;
 using PlaneGame2.Misc;
 
 //TODO: Fix the chunk cloning glitch.
+//The truth is that I've done a pretty shitty job here. 
+//None of this works like it should. 
+//There are too many issues to count. 
+//Is it worth fixing? Or should I just redo it?
 
 namespace PlaneGame2
 {
@@ -81,6 +85,18 @@ namespace PlaneGame2
             Terrain.Shader = voxelShader;
             Terrain.Atlas = atlas;
 
+            for (int x = -5; x <= 5; x++)
+            {
+                for (int y = -5; y <= 5; y++)
+                {
+                    CurrentChunk = Terrain[(int)ChunkCoords.X + x, (int)ChunkCoords.Y + y];
+                    if (CurrentChunk == null && Terrain.PositionInRange((int)ChunkCoords.X + x, (int)ChunkCoords.Y + y))
+                    {
+                        Terrain.QueryChunkLoad((int)ChunkCoords.X + x, (int)ChunkCoords.Y + y);//I bet this is getting called multiple times. 
+                    }
+                }
+            }
+
             FPSFont = Content.Load<SpriteFont>("FPS");
 
             // TODO: use this.Content to load your game content here
@@ -107,11 +123,11 @@ namespace PlaneGame2
                     float deltaY = CurrentMouseState.Y - OriginalMouseState.Y;
 
                     float tanFov = 2 * (float)System.Math.Tan(mainCamera.FieldOfView * 0.00872664625d);
-                    float deltaPitch = (float)System.Math.Atan(tanFov * deltaY / GraphicsDevice.Viewport.Height / 2);
-                    float deltaYaw = (float)System.Math.Atan(tanFov * deltaX / GraphicsDevice.Viewport.Width / 2);
+                    float deltaPitch = -(float)System.Math.Atan(tanFov * deltaY / GraphicsDevice.Viewport.Height / 2);
+                    float deltaYaw = -(float)System.Math.Atan(tanFov * deltaX / GraphicsDevice.Viewport.Width / 2);
                     camPitch += 15 * deltaPitch;
                     camYaw += 15 * deltaYaw;
-                    mainCamera.Rotation = Matrix.CreateRotationY(camYaw) * Matrix.CreateRotationX(camPitch);
+                    mainCamera.Rotation = Matrix.CreateRotationX(camPitch) * Matrix.CreateRotationY(camYaw);
 
                     Mouse.SetPosition(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
                 }
@@ -149,22 +165,22 @@ namespace PlaneGame2
 
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
-                    mainCamera.Position -= 0.5f * mainCamera.UpVector;
+                    mainCamera.Position += 0.5f * mainCamera.UpVector;
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.E))
                 {
-                    mainCamera.Position += 0.5f * mainCamera.UpVector;
+                    mainCamera.Position -= 0.5f * mainCamera.UpVector;
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.A))
                 {
-                    mainCamera.Position += 0.5f * mainCamera.RightVector;
+                    mainCamera.Position -= 0.5f * mainCamera.RightVector;
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.D))
                 {
-                    mainCamera.Position -= 0.5f * mainCamera.RightVector;
+                    mainCamera.Position += 0.5f * mainCamera.RightVector;
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.W))
@@ -182,11 +198,11 @@ namespace PlaneGame2
 
             ChunkCoords = Terrain.GetChunkCoords(mainCamera.Position);//It may be possible to use a linked list of loaded chunks, then traverse the list and unload chunks that are not needed
 
-            if (ChunkCoords != lastChunkCoords)
+            /*if (ChunkCoords != lastChunkCoords)
             {
-                for (int x = -5; x <= 5; x++)
+                for (int x = -10; x <= 10; x++)
                 {
-                    for (int y = -5; y <= 5; y++)
+                    for (int y = -10; y <= 10; y++)
                     {
                         CurrentChunk = Terrain[(int)ChunkCoords.X + x, (int)ChunkCoords.Y + y];
                         if (CurrentChunk == null && Terrain.PositionInRange((int)ChunkCoords.X + x, (int)ChunkCoords.Y + y))
@@ -207,11 +223,16 @@ namespace PlaneGame2
                             Chunk ValAsChunk = (Chunk)Child.Value;
                             Vector3 ChunkPos = ValAsChunk.Position;
                             Vector2 Coords = new Vector2((ChunkPos.X - 15.5f) / 16f, (ChunkPos.Z - 15.5f) / 16f);
-                            if (Coords.X - ChunkCoords.X < -5 || Coords.X - ChunkCoords.X > 5 || Coords.Y - ChunkCoords.Y < -5 || Coords.Y - ChunkCoords.Y > 5)
+                            if (Coords.X - ChunkCoords.X < -10 || Coords.X - ChunkCoords.X > 10 || Coords.Y - ChunkCoords.Y < -10 || Coords.Y - ChunkCoords.Y > 10)
                             {
                                 if (!ValAsChunk.DeloadScheduled)
                                 {
                                     Terrain.QueryChunkDeload((int)Coords.X, (int)Coords.Y);
+                                    Terrain[(int)Coords.X, (int)Coords.Y].DeloadScheduled = true;
+                                }
+                                else
+                                {
+                                    Terrain[(int)Coords.X, (int)Coords.Y].DeloadScheduled = true;
                                 }
                             }
                         }
@@ -223,7 +244,8 @@ namespace PlaneGame2
                     }
                 }
             }
-            lastChunkCoords = ChunkCoords;
+            lastChunkCoords = ChunkCoords;*/
+            Terrain.ProcessQueries();
             
 
             //Updates the scene

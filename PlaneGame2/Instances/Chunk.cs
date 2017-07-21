@@ -16,13 +16,6 @@ namespace PlaneGame2.Instances
         /// <summary> Tells the engine to recalculate the mesh, if necessary </summary>
         public bool UpdateFlag = false;
         public bool DeloadScheduled = false;
-        public byte BlockGen(int x, int y, int z)//This method needs to be moved to it's own class
-        {
-            float yOff = 16 * Noise.GetOctaveNoise(((double)x - Position.X) / 50f, 0, ((double)z - Position.Z) / 50f, 1);
-            float noise = 10 * Noise.GetOctaveNoise(((double)x - Position.X) / 20f, ((double)y - Position.Y) / 20f, ((double)z - Position.Z) / 20f, 1) - yOff - 32 + y;//Temporary generator
-
-            return (byte)((noise < 6 && noise > 3.5) ? 2 : (noise < 3.5) ? 1 : 0);
-        }
 
         /// <summary> The data for this chunk </summary>
         /// <param name="x"> The x coord of the voxel data </param>
@@ -31,7 +24,7 @@ namespace PlaneGame2.Instances
         /// <returns> The byte at the given coords. Also able to extend to  </returns>
         public override byte this[int x, int y, int z]
         {
-            get => isInRange(x, y, z) ? voxelData[x, y, z] : Container.GetChunkID(ToGlobalCoordinates(new Vector3(-x, -y, -z)));//Ask the current chunk manager for the data, if it's out of range.
+            get => isInRange(x, y, z) ? voxelData[x, y, z] : Container.GetChunkID(ToGlobalCoordinates(new Vector3(x, -y, z)));//Ask the current chunk manager for the data, if it's out of range.
             set { if (isInRange(x, y, z)) voxelData[x, y, z] = value; }
         }
 
@@ -44,7 +37,7 @@ namespace PlaneGame2.Instances
                 {
                     for (int y = 0; y < Height; y++)
                     {
-                        this[x, y, z] = TerrainGenerator.BlockGen(x - Position.X, y - Position.Y, z - Position.Z);
+                        this[x, y, z] = TerrainGenerator.BlockGen(x + Position.X, y + Position.Y, z + Position.Z);
                     }
                 }
             }

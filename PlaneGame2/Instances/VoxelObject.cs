@@ -78,7 +78,7 @@ namespace PlaneGame2.Instances
             int sgnX = System.Math.Sign(ObjSpace.X);
             int sgnY = System.Math.Sign(ObjSpace.Y);
             int sgnZ = System.Math.Sign(ObjSpace.Z);
-            Vector3 returnVector = new Vector3(-mod(ObjSpace.X + 0.5f * sgnX, 1), -mod(ObjSpace.Y + 0.5f * sgnY, 1), -mod(ObjSpace.Z + 0.5f * sgnZ, 1));
+            Vector3 returnVector = new Vector3(mod(ObjSpace.X + 0.5f * sgnX, 1), mod(ObjSpace.Y + 0.5f * sgnY, 1), mod(ObjSpace.Z + 0.5f * sgnZ, 1));
             return returnVector;
         }// I think I need to do an inverse function of this.
 
@@ -94,12 +94,13 @@ namespace PlaneGame2.Instances
                 if (MeshData != null)
                 {
                     //The matrices needed for drawing
+                    Matrix World = GlobalTransform;
                     Matrix WorldInverse = Matrix.Invert(GlobalTransform);
-                    Matrix View = activeCamera.GlobalTransform;
+                    Matrix View = Matrix.Invert(activeCamera.GlobalTransform);
                     Matrix Projection = activeCamera.ProjectionMatrix;
 
                     //Sets the matrices for the mesh
-                    MeshData.Shader.Parameters["World"].SetValue(WorldInverse);
+                    MeshData.Shader.Parameters["World"].SetValue(World);
                     MeshData.Shader.Parameters["View"].SetValue(View);
                     MeshData.Shader.Parameters["Projection"].SetValue(Projection);
                     MeshData.Shader.Parameters["WorldInverseTranspose"].SetValue(Matrix.Transpose(WorldInverse));

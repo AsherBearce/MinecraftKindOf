@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System;
 
 namespace PlaneGame2.Instances
 {
     /// <summary> A base class for all game objects </summary>
-    public abstract class Instance
+    public abstract class Instance : IDisposable
     {
         #region PRIVATE FIELDS
         /// <summary> The internal parent object </summary>
@@ -58,6 +59,7 @@ namespace PlaneGame2.Instances
         {
             if (child.ContainerNode.List == Children && child.Parent == this)
                 Children.Remove(child.ContainerNode);
+                child.Dispose();
         }
         #endregion
 
@@ -71,6 +73,11 @@ namespace PlaneGame2.Instances
             {
                 foreach (Instance i in Children) i.Draw(graphicsDevice, activeCamera);
             }
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
 
         /// <summary> Updates this Instance and all of its children </summary>

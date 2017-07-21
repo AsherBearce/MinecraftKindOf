@@ -20,7 +20,7 @@ namespace PlaneGame2.Instances
         public Matrix LocalTransform { get { return localTransform; } set { localTransform = value; } }
 
         /// <summary> The transform of this GameObject in global space </summary>
-        public Matrix GlobalTransform { get { return ((Parent is GameObject p) ? p.GlobalTransform : Matrix.Identity) * LocalTransform; } }
+        public Matrix GlobalTransform { get { return LocalTransform * ((Parent is GameObject p) ? p.GlobalTransform : Matrix.Identity); } }
 
         /// <summary> the rotation of this GameObject </summary>
         public Matrix Rotation
@@ -66,20 +66,20 @@ namespace PlaneGame2.Instances
         }
 
         /// <summary> The forward facing vector of this GameObject </summary>
-        public Vector3 ForwardVector { get { return new Vector3(LocalTransform.M13, LocalTransform.M23, LocalTransform.M33); } }
+        public Vector3 ForwardVector { get { return LocalTransform.Forward; } } // new Vector3(LocalTransform.M13, LocalTransform.M23, LocalTransform.M33); } }
 
         /// <summary> The rightward facing vector of this GameObject </summary>
-        public Vector3 RightVector { get { return new Vector3(LocalTransform.M11, LocalTransform.M21, LocalTransform.M31); } }
+        public Vector3 RightVector { get { return LocalTransform.Right; } }//new Vector3(LocalTransform.M11, LocalTransform.M21, LocalTransform.M31); } }
 
         /// <summary> The upward facing vector of this GameObject </summary>
-        public Vector3 UpVector { get { return new Vector3(LocalTransform.M12, LocalTransform.M22, LocalTransform.M32); } }
+        public Vector3 UpVector { get { return LocalTransform.Up; } }//new Vector3(LocalTransform.M12, LocalTransform.M22, LocalTransform.M32); } }
         #endregion
 
         #region PRIVATE PROPERTIES
         /// <summary> Updates the transform </summary>
         private void updateTransform()
         {
-            localTransform = Matrix.CreateTranslation(position) * rotation * Matrix.CreateScale(scale);
+            localTransform = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);//Matrix.CreateTranslation(position) * rotation * Matrix.CreateScale(scale);
         }
         #endregion
 

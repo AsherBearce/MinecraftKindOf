@@ -24,12 +24,13 @@ namespace PlaneGame2.Instances
                 if (MeshData != null)
                 {
                     //The matrices needed for drawing
+                    Matrix World = GlobalTransform;
                     Matrix WorldInverse = Matrix.Invert(GlobalTransform);
-                    Matrix View = activeCamera.GlobalTransform;
+                    Matrix View = Matrix.Invert(activeCamera.GlobalTransform);
                     Matrix Projection = activeCamera.ProjectionMatrix;
 
                     //Sets the matrices for the mesh
-                    MeshData.Shader.Parameters["World"].SetValue(WorldInverse);
+                    MeshData.Shader.Parameters["World"].SetValue(World);
                     MeshData.Shader.Parameters["View"].SetValue(View);
                     MeshData.Shader.Parameters["Projection"].SetValue(Projection);
                     MeshData.Shader.Parameters["WorldInverseTranspose"].SetValue(Matrix.Transpose(WorldInverse));

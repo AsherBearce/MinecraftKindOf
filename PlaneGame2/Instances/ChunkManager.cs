@@ -24,7 +24,7 @@ namespace PlaneGame2.Instances
         internal LinkedList<LoadQuery> ChunkQuery = new LinkedList<LoadQuery>();
         public Texture2D Atlas;
         public Effect Shader;
-        public int QueriesPerThread = 4;
+        public int QueriesPerThread = 1;
         public bool ProcessingQueries { get; private set; }
 
         public Chunk this[int x, int y]
@@ -104,29 +104,28 @@ namespace PlaneGame2.Instances
 
         public void LoadChunk(int x, int y, Texture2D atlas)//Eventually will look for a file to load the chunk from.
         {
-            //Chunk newChunk = new Chunk(this);
             Chunk newChunk = Chunks[x, y];
-            newChunk.Parent = this;
+            newChunk.Parent = this.Parent;
             newChunk.Atlas = atlas;
-            newChunk.Position = new Vector3(15.5f + x * 16, 0, 15.5f + y * 16);
+            newChunk.Position = new Vector3(x * 16, 0, y * 16);
             newChunk.Container = this;
             newChunk.PopulateChunk();
             newChunk.Visible = false;
-            AddChunk(newChunk, x, y);
+            //AddChunk(newChunk, x, y);
         }
 
         public void DrawChunk(int x, int y)
         {
-            //Chunks[x, y].RecalculateMesh(device, Shader);//This shouldn't be called here.
             Chunks[x, y].MeshData.Shader = Shader;
             Chunks[x, y].UpdateFlag = true;
             Chunks[x, y].Visible = true;
         }
+
         public void UnloadChunk(int x, int y)//Eventually will write to a file.
         {
             if (Chunks[x, y] != null)
             {
-                Chunks[x, y].Deallocate();
+                Chunks[x, y].Dispose();
                 Chunks[x, y].Parent = null;
                 Chunks[x, y] = null;
             }
@@ -165,21 +164,6 @@ namespace PlaneGame2.Instances
             }
         }
 
-        public void BuildWorld(GraphicsDevice device, Effect Shader)//This function is temporary. Do not load the entire world in one go. Should show only the chunks that are needed.
-        {
-            for (int x = 0; x < Width; x++)//About 64 chunks being loaded here. Quite good
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    if (Chunks[x, y] != null)
-                    {
-                        Chunks[x, y].Visible = true;
-                        Chunks[x, y].RecalculateMesh(device, Shader);
-                    }
-                    
-                }
-            }
-        }
         public void SetBlockID(Vector3 position, byte ID)
         {
             Chunk targ = GetChunkFromPos(position);
@@ -212,12 +196,13 @@ namespace PlaneGame2.Instances
             }
             else
             {
-                //Do something
+                Console.WriteLine("Out of range");
             }
         }
         public byte GetChunkID(Vector3 position)//All return 0's should return the block ID output by the noise function.
         {
             int sgnX = System.Math.Sign(position.X);
+            int sgnY = System.Math.Sign(position.Y);
             int sgnZ = System.Math.Sign(position.Z);
             int cx = Mod(position.X, 16);
             int cy = Mod(position.Z, 16);
@@ -228,14 +213,15 @@ namespace PlaneGame2.Instances
                 if (targ != null)
                 {
                     Vector3 Coords = targ.VoxelCoordinates(position);
+                    Vector3 GlobalCoords = targ.ToGlobalCoordinates(new Vector3(Coords.X, -Coords.Y, Coords.Z));
 
-                    if (targ.isInRange((int)Coords.X, (int)Coords.Y, (int)Coords.Z))//checking to make sure that the Coordinates are actually in a chunk
+                    if (targ.isInRange((int)Coords.X, -(int)Coords.Y, (int)Coords.Z))//checking to make sure that the Coordinates are actually in a chunk
                     {
-                        return targ[(int)Coords.X, (int)Coords.Y, (int)Coords.Z];
+                        return targ[(int)Coords.X, -(int)Coords.Y, (int)Coords.Z];
                     }
                     else
                     {
-                        return 0;//If for whatever reason the coordinate is too high
+                        return TerrainGenerator.BlockGen(GlobalCoords.X, GlobalCoords.Y, GlobalCoords.Z);//If for whatever reason the coordinate is too high
                     }
                 }
                 else
@@ -251,7 +237,7 @@ namespace PlaneGame2.Instances
 
         public override void Update(GameTime gameTime)
         {
-            ProcessQueries();
+            //ProcessQueries();
             base.Update(gameTime);
         }
 
@@ -259,7 +245,6 @@ namespace PlaneGame2.Instances
             : base("Terrain")
         {
             Chunks = new Chunk[width, height];
-
         }
     }
 }
