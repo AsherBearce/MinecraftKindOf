@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -84,18 +85,6 @@ namespace PlaneGame2
             coob.MeshData.Shader = shader;
             Terrain.Shader = voxelShader;
             Terrain.Atlas = atlas;
-
-            for (int x = -5; x <= 5; x++)
-            {
-                for (int y = -5; y <= 5; y++)
-                {
-                    CurrentChunk = Terrain[(int)ChunkCoords.X + x, (int)ChunkCoords.Y + y];
-                    if (CurrentChunk == null && Terrain.PositionInRange((int)ChunkCoords.X + x, (int)ChunkCoords.Y + y))
-                    {
-                        Terrain.QueryChunkLoad((int)ChunkCoords.X + x, (int)ChunkCoords.Y + y);//I bet this is getting called multiple times. 
-                    }
-                }
-            }
 
             FPSFont = Content.Load<SpriteFont>("FPS");
 
@@ -198,7 +187,7 @@ namespace PlaneGame2
 
             ChunkCoords = Terrain.GetChunkCoords(mainCamera.Position);//It may be possible to use a linked list of loaded chunks, then traverse the list and unload chunks that are not needed
 
-            /*if (ChunkCoords != lastChunkCoords)
+            if (ChunkCoords != lastChunkCoords)
             {
                 for (int x = -10; x <= 10; x++)
                 {
@@ -218,20 +207,17 @@ namespace PlaneGame2
                 {
                     while (Child.Next != null)
                     {
+                        Console.WriteLine("There are childs");
                         if (Child.Value is Chunk)
                         {
                             Chunk ValAsChunk = (Chunk)Child.Value;
                             Vector3 ChunkPos = ValAsChunk.Position;
-                            Vector2 Coords = new Vector2((ChunkPos.X - 15.5f) / 16f, (ChunkPos.Z - 15.5f) / 16f);
+                            Vector2 Coords = new Vector2((ChunkPos.X) / 16f, (ChunkPos.Z) / 16f);
                             if (Coords.X - ChunkCoords.X < -10 || Coords.X - ChunkCoords.X > 10 || Coords.Y - ChunkCoords.Y < -10 || Coords.Y - ChunkCoords.Y > 10)
                             {
                                 if (!ValAsChunk.DeloadScheduled)
                                 {
                                     Terrain.QueryChunkDeload((int)Coords.X, (int)Coords.Y);
-                                    Terrain[(int)Coords.X, (int)Coords.Y].DeloadScheduled = true;
-                                }
-                                else
-                                {
                                     Terrain[(int)Coords.X, (int)Coords.Y].DeloadScheduled = true;
                                 }
                             }
@@ -244,10 +230,9 @@ namespace PlaneGame2
                     }
                 }
             }
-            lastChunkCoords = ChunkCoords;*/
+            lastChunkCoords = ChunkCoords;
             Terrain.ProcessQueries();
             
-
             //Updates the scene
             mainScene.Update(gameTime);
 

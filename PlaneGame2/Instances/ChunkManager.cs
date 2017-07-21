@@ -105,7 +105,7 @@ namespace PlaneGame2.Instances
         public void LoadChunk(int x, int y, Texture2D atlas)//Eventually will look for a file to load the chunk from.
         {
             Chunk newChunk = Chunks[x, y];
-            newChunk.Parent = this.Parent;
+            newChunk.Parent = this;
             newChunk.Atlas = atlas;
             newChunk.Position = new Vector3(x * 16, 0, y * 16);
             newChunk.Container = this;
@@ -193,10 +193,6 @@ namespace PlaneGame2.Instances
                 {
                     East.UpdateFlag = true;
                 }
-            }
-            else
-            {
-                Console.WriteLine("Out of range");
             }
         }
         public byte GetChunkID(Vector3 position)//All return 0's should return the block ID output by the noise function.
