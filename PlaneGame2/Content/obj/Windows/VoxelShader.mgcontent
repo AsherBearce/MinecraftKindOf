@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/PlaneGame2/PlaneGame2/Content/VoxelShader.fx</SourceFile>
+  <SourceFile>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/MinecraftKindOf/PlaneGame2/Content/VoxelShader.fx</SourceFile>
   <SourceTime>2017-07-11T17:40:36.9404593-06:00</SourceTime>
-  <DestFile>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/PlaneGame2/PlaneGame2/Content/bin/Windows/VoxelShader.xnb</DestFile>
-  <DestTime>2017-07-13T14:36:56.4961525-06:00</DestTime>
+  <DestFile>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/MinecraftKindOf/PlaneGame2/Content/bin/Windows/VoxelShader.xnb</DestFile>
+  <DestTime>2017-08-20T13:41:54.2876951-06:00</DestTime>
   <Importer>EffectImporter</Importer>
   <ImporterTime>2017-03-01T08:05:36-07:00</ImporterTime>
   <Processor>EffectProcessor</Processor>

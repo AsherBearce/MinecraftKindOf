@@ -123,8 +123,8 @@ namespace PlaneGame2
 
                 if (Keyboard.GetState().IsKeyDown(Keys.F))
                 {
-                    
-                    for (int x = -1; x < 2; x++)//There should be a function for all this
+                    Terrain.DrawRay(mainCamera.Position, mainCamera.ForwardVector, 100, 1);  
+                    /*for (int x = -1; x < 2; x++)//There should be a function for all this
                     {
                         for (int y = -1; y < 2; y++)
                         {
@@ -133,7 +133,7 @@ namespace PlaneGame2
                                 Terrain.SetBlockID(mainCamera.Position + new Vector3(x, y, z), (byte)0);
                             }
                         }
-                    }
+                    }*/
                 }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.R))
@@ -207,7 +207,6 @@ namespace PlaneGame2
                 {
                     while (Child.Next != null)
                     {
-                        Console.WriteLine("There are childs");
                         if (Child.Value is Chunk)
                         {
                             Chunk ValAsChunk = (Chunk)Child.Value;

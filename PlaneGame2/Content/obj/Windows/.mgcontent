@@ -4,10 +4,10 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/PlaneGame2/PlaneGame2/Content/BasicShader.fx</File>
-    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/PlaneGame2/PlaneGame2/Content/VoxelShader.fx</File>
-    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/PlaneGame2/PlaneGame2/Content/Stone.png</File>
-    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/PlaneGame2/PlaneGame2/Content/TexAtlas.png</File>
-    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/PlaneGame2/PlaneGame2/Content/FPS.spritefont</File>
+    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/MinecraftKindOf/PlaneGame2/Content/BasicShader.fx</File>
+    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/MinecraftKindOf/PlaneGame2/Content/VoxelShader.fx</File>
+    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/MinecraftKindOf/PlaneGame2/Content/Stone.png</File>
+    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/MinecraftKindOf/PlaneGame2/Content/TexAtlas.png</File>
+    <File>C:/Users/Asher/Desktop/Suff to move/TechyStuff/CodeStuff/GithubShit/MinecraftKindOf/PlaneGame2/Content/FPS.spritefont</File>
   </SourceFiles>
 </SourceFileCollection>

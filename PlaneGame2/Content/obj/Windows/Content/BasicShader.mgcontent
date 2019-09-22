@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/Redemption/Documents/Programming Projects/C#/MinecraftKindOf/PlaneGame2/Content/BasicShader.fx</SourceFile>
+  <SourceTime>2017-07-02T22:10:16-06:00</SourceTime>
+  <DestFile>C:/Users/Redemption/Documents/Programming Projects/C#/MinecraftKindOf/PlaneGame2/Content/bin/Windows/Content/BasicShader.xnb</DestFile>
+  <DestTime>2019-09-22T16:16:54.4567592-06:00</DestTime>
+  <Importer>EffectImporter</Importer>
+  <ImporterTime>2018-12-08T09:35:54-07:00</ImporterTime>
+  <Processor>EffectProcessor</Processor>
+  <ProcessorTime>2018-12-08T09:35:54-07:00</ProcessorTime>
+  <Parameters>
+    <Key>DebugMode</Key>
+    <Value>Auto</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

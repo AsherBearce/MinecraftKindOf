@@ -12,7 +12,6 @@ using PlaneGame2.Blocks;
  * Enhance texturing abilities
  * Create voxel raycasting
  * Add loading method for VoxelObjects <- May not be needed
- * -Note for later on raycasting : it would be best to cull the line segment to the voxel dimensions. Also should be implemented when doing physics.
  */
 namespace PlaneGame2.Instances
 {
@@ -119,11 +118,6 @@ namespace PlaneGame2.Instances
             }
             //Draws any children regardless of whether or not this MeshObject has a MeshData
             base.Draw(graphicsDevice, activeCamera);
-        }
-
-        public void Deallocate()
-        {
-            voxelData = null;
         }
 
         /// <summary> Creates a mesh based on the voxel data </summary>

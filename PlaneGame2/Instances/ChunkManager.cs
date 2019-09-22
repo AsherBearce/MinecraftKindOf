@@ -18,6 +18,81 @@ namespace PlaneGame2.Instances
         public byte Command;//0 loads a chunk, 1 unloads
     }
 
+    public class BetterManager : Instance
+    {
+        internal uint[,] Chunks;
+        internal LinkedList<Chunk> FreedMemory;
+        internal Chunk[] UsedMemory;
+        internal LinkedList<LoadQuery> Queries;
+        public Texture2D Atlas;
+        public Effect Shader;
+        public int QueriesPerThread = 4;
+
+        public int Width => Chunks.GetLength(0);
+
+        public int Height => Chunks.GetLength(1);
+
+        public Chunk this[int x, int y]
+        {
+            get => (x >= 0 && x < Width && y >= 0 && y < Height) ? UsedMemory[(int)Chunks[x, y]] : null;
+        }
+        /*          if (NodeInList.Value.Command == 1)
+                    {
+                        Next = NodeInList.Next;
+                        this.LoadChunk(NodeInList.Value.x, NodeInList.Value.y, Atlas);
+                        this.DrawChunk(NodeInList.Value.x, NodeInList.Value.y);
+                        ChunkQuery.Remove(NodeInList);
+                        NodeInList = Next;
+                    }
+         */
+
+        public void ProcessQueries()
+        {
+            if (Queries.Count != 0)
+            {
+                LinkedListNode<LoadQuery> NodeInList = Queries.First;
+                LinkedListNode<LoadQuery> Next;
+                uint queriesProcessed = 0;
+                bool Stop = false;
+
+                while (queriesProcessed <= QueriesPerThread || !Stop)
+                {
+                    if (NodeInList.Value.Command == 0)
+                    {
+                        Next = NodeInList.Next;
+                        //do some unloading stuff
+                        this.UnloadChunk(NodeInList.Value.x, NodeInList.Value.y);
+                        Queries.Remove(NodeInList);
+                        NodeInList = Next;
+                    }
+                    else
+                    {
+                        Next = NodeInList.Next;
+                        //do some loading stuff
+                        Queries.Remove(NodeInList);
+                        NodeInList = Next;
+                    }
+                }
+            }
+        }
+
+        public void LoadChunk()
+        {
+
+        }
+
+        public void UnloadChunk(int x, int y)
+        {
+
+        }
+
+        public BetterManager(int width, int height) 
+            : base("Terrain")
+        {
+            //Chunks = new Chunk[width, height];
+        }
+    }
+
     public class ChunkManager : Instance
     {
         internal Chunk[,] Chunks;
@@ -102,7 +177,7 @@ namespace PlaneGame2.Instances
 
         }
 
-        public void LoadChunk(int x, int y, Texture2D atlas)//Eventually will look for a file to load the chunk from.
+        private void LoadChunk(int x, int y, Texture2D atlas)//Eventually will look for a file to load the chunk from.
         {
             Chunk newChunk = Chunks[x, y];
             newChunk.Parent = this;
@@ -111,17 +186,16 @@ namespace PlaneGame2.Instances
             newChunk.Container = this;
             newChunk.PopulateChunk();
             newChunk.Visible = false;
-            //AddChunk(newChunk, x, y);
         }
 
-        public void DrawChunk(int x, int y)
+        private void DrawChunk(int x, int y)
         {
             Chunks[x, y].MeshData.Shader = Shader;
             Chunks[x, y].UpdateFlag = true;
             Chunks[x, y].Visible = true;
         }
 
-        public void UnloadChunk(int x, int y)//Eventually will write to a file.
+        private void UnloadChunk(int x, int y)//Eventually will write to a file.
         {
             if (Chunks[x, y] != null)
             {
@@ -195,6 +269,7 @@ namespace PlaneGame2.Instances
                 }
             }
         }
+
         public byte GetChunkID(Vector3 position)//All return 0's should return the block ID output by the noise function.
         {
             int sgnX = System.Math.Sign(position.X);
@@ -231,9 +306,71 @@ namespace PlaneGame2.Instances
             }
         }
 
+        public void DrawRay(Vector3 start, Vector3 direction, int length, byte ID)
+        {
+            Vector3 Start = new Vector3(Mod(start.X, 1), Mod(start.Y, 1), Mod(start.Z, 1));
+            Vector3 end = start + direction * length;
+            int xDist = Math.Abs((int)(start - end).X);
+            int yDist = Math.Abs((int)(start - end).Y);
+            int zDist = Math.Abs((int)(start - end).Z);
+
+            int steps = 1 + xDist + yDist + zDist;
+
+            int xInc = (end.X > start.X) ? 1 : -1;
+            int yInc = (end.Y > start.Y) ? 1 : -1;
+            int zInc = (end.Z > start.Z) ? 1 : -1;
+
+            int errorXY = yDist - xDist;
+            int errorXZ = zDist - xDist;
+            int errorZY = yDist - zDist;
+
+            int x = (int)Start.X;
+            int y = (int)Start.Y;
+            int z = (int)Start.Z;
+
+            for (; steps > 0; --steps)
+            {
+                /*if (x < 0 || x > 39 || y < 0 || y > 39 || z < 0 || z > 39)
+                {
+                    break;
+                }*/
+                SetBlockID(new Vector3(x, y, z), ID);
+
+                if (errorXY < 0)
+                {
+                    if (errorXZ < 0)
+                    {
+                        x += xInc;
+                        errorXY += yDist;
+                        errorXZ += zDist;
+                    }
+                    else
+                    {
+                        z += zInc;
+                        errorXZ -= xDist;
+                        errorZY += yDist;
+                    }
+                }
+                else
+                {
+                    if (errorZY < 0)
+                    {
+                        z += zInc;
+                        errorXZ -= xDist;
+                        errorZY += yDist;
+                    }
+                    else
+                    {
+                        y += yInc;
+                        errorXY -= xDist;
+                        errorZY -= zDist;
+                    }
+                }
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
-            //ProcessQueries();
             base.Update(gameTime);
         }
 
